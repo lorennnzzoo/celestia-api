@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="celestiaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Boards">
+          <Key>
+            <PropertyRef Name="board_id" />
+          </Key>
+          <Property Name="board_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="Threads">
+          <Key>
+            <PropertyRef Name="thread_id" />
+          </Key>
+          <Property Name="thread_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="parent_thread" Type="int" />
+          <Property Name="board_id" Type="int" />
+          <Property Name="user_cookie_id" Type="varchar" MaxLength="255" />
+          <Property Name="thread_caption" Type="varchar" MaxLength="255" />
+          <Property Name="content" Type="text" />
+          <Property Name="image" Type="varbinary(max)" />
+          <Property Name="image_file_name" Type="nvarchar(max)" />
+          <Property Name="image_file_size" Type="bigint" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="pin" Type="bit" />
+          <Property Name="is_user_mod" Type="bit" />
+          <Property Name="is_reply_to_op" Type="bit" />
+          <Property Name="is_op_reply" Type="bit" />
+        </EntityType>
+        <Association Name="FK__Threads__board_i__1ED998B2">
+          <End Role="Boards" Type="Self.Boards" Multiplicity="0..1" />
+          <End Role="Threads" Type="Self.Threads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Boards">
+              <PropertyRef Name="board_id" />
+            </Principal>
+            <Dependent Role="Threads">
+              <PropertyRef Name="board_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Threads__parent___1DE57479">
+          <End Role="Threads" Type="Self.Threads" Multiplicity="0..1" />
+          <End Role="Threads1" Type="Self.Threads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Threads">
+              <PropertyRef Name="thread_id" />
+            </Principal>
+            <Dependent Role="Threads1">
+              <PropertyRef Name="parent_thread" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="celestiaModelStoreContainer">
+          <EntitySet Name="Boards" EntityType="Self.Boards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Threads" EntityType="Self.Threads" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Threads__board_i__1ED998B2" Association="Self.FK__Threads__board_i__1ED998B2">
+            <End Role="Boards" EntitySet="Boards" />
+            <End Role="Threads" EntitySet="Threads" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Threads__parent___1DE57479" Association="Self.FK__Threads__parent___1DE57479">
+            <End Role="Threads" EntitySet="Threads" />
+            <End Role="Threads1" EntitySet="Threads" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="celestiaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Board">
+          <Key>
+            <PropertyRef Name="board_id" />
+          </Key>
+          <Property Name="board_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Threads" Relationship="Self.FK__Threads__board_i__1ED998B2" FromRole="Boards" ToRole="Threads" />
+        </EntityType>
+        <EntityType Name="Thread">
+          <Key>
+            <PropertyRef Name="thread_id" />
+          </Key>
+          <Property Name="thread_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="parent_thread" Type="Int32" />
+          <Property Name="board_id" Type="Int32" />
+          <Property Name="user_cookie_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="thread_caption" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="image_file_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="image_file_size" Type="Int32" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="pin" Type="Boolean" />
+          <Property Name="is_user_mod" Type="Boolean" />
+          <Property Name="is_reply_to_op" Type="Boolean" />
+          <Property Name="is_op_reply" Type="Boolean" />
+          <NavigationProperty Name="Board" Relationship="Self.FK__Threads__board_i__1ED998B2" FromRole="Threads" ToRole="Boards" />
+          <NavigationProperty Name="Threads1" Relationship="Self.FK__Threads__parent___1DE57479" FromRole="Threads" ToRole="Threads1" />
+          <NavigationProperty Name="Thread1" Relationship="Self.FK__Threads__parent___1DE57479" FromRole="Threads1" ToRole="Threads" />
+        </EntityType>
+        <Association Name="FK__Threads__board_i__1ED998B2">
+          <End Role="Boards" Type="Self.Board" Multiplicity="0..1" />
+          <End Role="Threads" Type="Self.Thread" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Boards">
+              <PropertyRef Name="board_id" />
+            </Principal>
+            <Dependent Role="Threads">
+              <PropertyRef Name="board_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Threads__parent___1DE57479">
+          <End Role="Threads" Type="Self.Thread" Multiplicity="0..1" />
+          <End Role="Threads1" Type="Self.Thread" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Threads">
+              <PropertyRef Name="thread_id" />
+            </Principal>
+            <Dependent Role="Threads1">
+              <PropertyRef Name="parent_thread" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="celestia" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Boards" EntityType="Self.Board" />
+          <EntitySet Name="Threads" EntityType="Self.Thread" />
+          <AssociationSet Name="FK__Threads__board_i__1ED998B2" Association="Self.FK__Threads__board_i__1ED998B2">
+            <End Role="Boards" EntitySet="Boards" />
+            <End Role="Threads" EntitySet="Threads" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Threads__parent___1DE57479" Association="Self.FK__Threads__parent___1DE57479">
+            <End Role="Threads" EntitySet="Threads" />
+            <End Role="Threads1" EntitySet="Threads" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="celestiaModelStoreContainer" CdmEntityContainer="celestia">
+          <EntitySetMapping Name="Boards">
+            <EntityTypeMapping TypeName="celestiaModel.Board">
+              <MappingFragment StoreEntitySet="Boards">
+                <ScalarProperty Name="board_id" ColumnName="board_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Threads">
+            <EntityTypeMapping TypeName="celestiaModel.Thread">
+              <MappingFragment StoreEntitySet="Threads">
+                <ScalarProperty Name="thread_id" ColumnName="thread_id" />
+                <ScalarProperty Name="parent_thread" ColumnName="parent_thread" />
+                <ScalarProperty Name="board_id" ColumnName="board_id" />
+                <ScalarProperty Name="user_cookie_id" ColumnName="user_cookie_id" />
+                <ScalarProperty Name="thread_caption" ColumnName="thread_caption" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="image_file_name" ColumnName="image_file_name" />
+                <ScalarProperty Name="image_file_size" ColumnName="image_file_size" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="pin" ColumnName="pin" />
+                <ScalarProperty Name="is_user_mod" ColumnName="is_user_mod" />
+                <ScalarProperty Name="is_reply_to_op" ColumnName="is_reply_to_op" />
+                <ScalarProperty Name="is_op_reply" ColumnName="is_op_reply" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
